@@ -1,6 +1,7 @@
 #coding=utf-8
 #/usr/bin/env python
 "图遍历算法测试"
+from collections import deque
 N ={
     'a':set('bcdef'),
     'b':set('ce'),
@@ -53,6 +54,26 @@ def dfs(G,s,d,f,S=None,t=0):
     f[s]=t;t+=1     #所有邻居节点访问结束
     return t
 
+#深度受限的dfs
+def iddfs(G,s):
+    yielded = set()
+    def recurse(G,s,d,S=None):
+        if S==None:S = set()
+        if d==0: return #递归深度控制
+        if s not in yielded:
+            yield s
+            yielded.add(s)
+        S.add(s)
+        for u in G[s]:
+            if u in S:continue
+            for v in recurse(G,u,d-1,S):
+                yield v  #返回yield s 类似于 return recurse()
+    n= len(G)
+    for d in range(n):    #可能的最大递归深度len(G)-1
+        if len(yielded) == n:break #所有节点都访问完成
+        for u in recurse(G,s,d): #返回yielded添加元素的顺序
+            yield u
+
 
 def dfs_topsort(G):
     S,res = set(),[]
@@ -76,5 +97,15 @@ def component(G):
         comp.append(C)
     return comp
 
+def bfs(G,s):
+    P,Q = dict(),deque()
+    P[s] = None; Q.append(s)
+    while Q:
+        u = Q.popleft()
+        for v in G[u]:
+            if v in P: continue
+            P[u] = v
+            Q.append(v)
+    return P
 if __name__ == '__main__':
-    print rec_dfs(N,'a')
+    print bfs(N,'a')
