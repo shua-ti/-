@@ -33,6 +33,17 @@ def iter_dfs(G,s):
         Q.extend(G[u])
     return S
 
+def bfs(G,s):
+    P,Q = dict(),deque()
+    P[s] = None; Q.append(s)
+    while Q:
+        u = Q.popleft()
+        for v in G[u]:
+            if v in P: continue
+            P[v] = u
+            Q.append(v)
+    return P
+
 def rec_dfs(G,s,S = None):
     if S==None: S = set()
     S.add(s)
@@ -97,15 +108,6 @@ def component(G):
         comp.append(C)
     return comp
 
-def bfs(G,s):
-    P,Q = dict(),deque()
-    P[s] = None; Q.append(s)
-    while Q:
-        u = Q.popleft()
-        for v in G[u]:
-            if v in P: continue
-            P[u] = v
-            Q.append(v)
-    return P
+
 if __name__ == '__main__':
     print bfs(N,'a')
