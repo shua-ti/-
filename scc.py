@@ -50,3 +50,6 @@ def scc(G):
         seen.update(C)
         sccs.append(C)  #C是单个强连通分量
     return sccs
+
+if __name__=='__main__':
+    print scc(G)
